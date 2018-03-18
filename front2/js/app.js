@@ -3,7 +3,7 @@ function insertBooks(listElem, books){
 
     books.forEach( book => {
 
-        let title = document.createElement('h3');
+    	let title = document.createElement('h3');
         title.innerText = book.title;
         
         var clickButton = document.createElement('button');
@@ -16,22 +16,18 @@ function insertBooks(listElem, books){
 
         let li = document.createElement('li');
         li.dataset.id=book.id;
-        //let div = document.createElement('div');
 
         li.appendChild(title);
         li.appendChild(clickButton); 
         li.appendChild(deleteButton);
         
         listElem.appendChild(li);
-        //listElem.appendChild(div);
     });
-
 }
 
 function showDiv( book, id){
 
 	var thisLi;
-	//var div = document.querySelector('div');
 	var li = document.querySelectorAll('li');
 	for (var i = 0; i < li.length; i++) {
 		if (li[i].getAttribute("data-id") == id) {
@@ -53,61 +49,48 @@ function showDiv( book, id){
 
     var type = document.createElement('h5');
     type.innerText = book.type;
-    
-    
-    //div.appendChild(author);
-    //div.appendChild(isbn);
-    //div.appendChild(publisher);
-    //div.appendChild(type);
 
     thisLi.appendChild(author);
     thisLi.appendChild(isbn);
     thisLi.appendChild(publisher);
     thisLi.appendChild(type);
-    
 }
 
 
 document.addEventListener("DOMContentLoaded",function(){
-
+	
 	var ul = document.querySelector('ul.books');
 	
 	$.ajax({
-		url: "http://localhost:8282/books",
+		url: "http://localhost:8080/Warsztaty_SpringMVC_REST/books/getBooks",
 		type: "GET",
 		dataType: "json"
 	})
 	.done( books => insertBooks(ul, books) );
-
-
-    $(ul).on('click', function(e){
+	
+	$(ul).on('click', function(e){
         if(e.target.classList == 'more') {	
             var parent = e.target.parentElement;
             var id = parent.getAttribute("data-id");
             $.ajax({
-        		url: "http://localhost:8282/books/" + id,
+        		url: "http://localhost:8080/Warsztaty_SpringMVC_REST/books/getBook/" + id,
         		type: "GET",
         		dataType: "json"
         	})
         	.done( book => showDiv(book, id) );
-            //$(ul).find('li').find('.more').off('click');
         } else if(e.target.classList == 'delete') {	
             var parent = e.target.parentElement;
             var id = parent.getAttribute("data-id");
             $.ajax({
-        		url: "http://localhost:8282/books/" + id,
+        		url: "http://localhost:8080/Warsztaty_SpringMVC_REST/books/deleteBook/" + id,
         		type: "DELETE",
-        		//dataType: "json"
         	})
         	.done( function() { alert('DELETE completed'); } );
-            //$(ul).find('li').find('btn').off('click');
         }
   
     })
     
-    
-    
-    var submit = document.querySelector('.btn');
+    /*var submit = document.querySelector('.btn');
     console.log(submit);
 	$(submit).on('click', function(event) {
 		var book = [{ "isbn": "3657142857143" },
@@ -126,6 +109,6 @@ document.addEventListener("DOMContentLoaded",function(){
     	})
     	.done (function() { alert('POST completed'); } )
 		.fail (function() { alert('POST failed'); } );
-	});
-
+	});*/
+	
 });
