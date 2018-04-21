@@ -71,6 +71,7 @@ function showDiv( book, id){
 document.addEventListener("DOMContentLoaded",function(){
 
 	var ul = document.querySelector('ul.books');
+	var formDivElem = document.querySelector("div.form-group");
 	
 	$.ajax({
 		url: "http://localhost:8282/books",
@@ -106,21 +107,25 @@ document.addEventListener("DOMContentLoaded",function(){
     })
     
     
-    
     var submit = document.querySelector('.btn');
-    console.log(submit);
 	$(submit).on('click', function(event) {
-		var book = [{ "isbn": "3657142857143" },
-		            { "title": "Dziadki" },
-		            { "publisher": "Helion" },
-		            { "type": "programming" },
-		            { "author": "Stanislaw Ignacy Miskiewicz" }];
-		var book = '{"isbn":"34321", "title":"Thinking in Java","publisher":"Helion","type":"programming","author":"Bruce Eckel"}'
+		if(event.target.tagName=="BUTTON"){
+			event.preventDefault();
+			var title = document.getElementById("title").value;
+			var author = document.getElementById("author").value;
+			var publisher = document.getElementById("publisher").value;
+			var type = document.getElementById("type").value;
+			var isbn = document.getElementById("isbn").value;
+		}
 		$.ajax({
     		url: "http://localhost:8282/books",
-    		data: book,
-    		//data: 'Content-Type: application/json, {"isbn":"34321","title":"Thinking in Java","publisher":"Helion","type":"programming","author":"Bruce Eckel"}',
-    		contentType: "Content-Type: application/json",
+    		data: JSON.stringify({
+                "title" : title,
+                "author" : author,
+                "publisher" : publisher,
+                "type" : type,
+                "isbn" : isbn}),
+    		contentType: "application/json",
     		type: "POST",
     		dataType: "json"
     	})
